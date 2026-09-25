@@ -45,11 +45,11 @@ def test_validate_date_range_rejects_start_after_end():
 
 def test_validate_date_range_rejects_range_over_max():
     with pytest.raises(ValidationError):
-        validate_date_range("2024-01-01", "2024-02-15")  # 46 days
+        validate_date_range("2024-01-01", "2024-02-15")
 
 
 def test_validate_date_range_accepts_exactly_max_days():
-    start, end = validate_date_range("2024-01-01", "2024-01-31")  # 31 days inclusive
+    start, end = validate_date_range("2024-01-01", "2024-01-31")
     assert (end - start).days + 1 == MAX_RANGE_DAYS
 
 

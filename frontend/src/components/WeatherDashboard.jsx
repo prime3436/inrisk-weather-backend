@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { 
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer 
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer
 } from 'recharts';
 import { CloudRain, Thermometer, Calendar } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
@@ -9,12 +9,11 @@ export default function WeatherDashboard({ fileData, fileName }) {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // fileData is expected to be the JSON response from Open-Meteo
   const daily = fileData?.daily;
-  
+
   const chartData = useMemo(() => {
     if (!daily || !daily.time) return [];
-    
+
     return daily.time.map((timeStr, index) => ({
       date: format(parseISO(timeStr), 'MMM dd'),
       rawDate: timeStr,
@@ -34,12 +33,11 @@ export default function WeatherDashboard({ fileData, fileName }) {
     );
   }
 
-  // Pagination Logic
   const totalRows = chartData.length;
   const totalPages = Math.ceil(totalRows / rowsPerPage);
-  
+
   const paginatedData = chartData.slice(
-    (currentPage - 1) * rowsPerPage, 
+    (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
 
@@ -57,7 +55,7 @@ export default function WeatherDashboard({ fileData, fileName }) {
         </div>
       </div>
 
-      {/* Chart Section */}
+      {}
       <div className="bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 p-6 rounded-2xl shadow-xl h-[400px]">
         <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider mb-6 flex items-center gap-2">
           <Thermometer className="w-4 h-4" />
@@ -68,7 +66,7 @@ export default function WeatherDashboard({ fileData, fileName }) {
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
             <XAxis dataKey="date" stroke="#94a3b8" tick={{fill: '#94a3b8', fontSize: 12}} tickMargin={10} />
             <YAxis stroke="#94a3b8" tick={{fill: '#94a3b8', fontSize: 12}} />
-            <RechartsTooltip 
+            <RechartsTooltip
               contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155', borderRadius: '8px' }}
               itemStyle={{ color: '#f8fafc' }}
             />
@@ -79,14 +77,14 @@ export default function WeatherDashboard({ fileData, fileName }) {
         </ResponsiveContainer>
       </div>
 
-      {/* Table Section */}
+      {}
       <div className="bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-xl overflow-hidden">
         <div className="p-4 border-b border-slate-700/50 flex justify-between items-center">
           <h3 className="text-sm font-medium text-slate-200">Daily Variables Data</h3>
           <div className="flex items-center gap-2 text-sm">
             <span className="text-slate-400">Rows per page:</span>
-            <select 
-              value={rowsPerPage} 
+            <select
+              value={rowsPerPage}
               onChange={(e) => {
                 setRowsPerPage(Number(e.target.value));
                 setCurrentPage(1);
@@ -99,7 +97,7 @@ export default function WeatherDashboard({ fileData, fileName }) {
             </select>
           </div>
         </div>
-        
+
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left text-slate-300">
             <thead className="text-xs text-slate-400 uppercase bg-slate-900/50">
@@ -124,21 +122,21 @@ export default function WeatherDashboard({ fileData, fileName }) {
             </tbody>
           </table>
         </div>
-        
-        {/* Pagination Controls */}
+
+        {}
         <div className="p-4 flex items-center justify-between border-t border-slate-700/50 bg-slate-900/20">
           <span className="text-sm text-slate-400">
             Showing <span className="font-medium text-slate-200">{(currentPage - 1) * rowsPerPage + 1}</span> to <span className="font-medium text-slate-200">{Math.min(currentPage * rowsPerPage, totalRows)}</span> of <span className="font-medium text-slate-200">{totalRows}</span> entries
           </span>
           <div className="flex gap-2">
-            <button 
+            <button
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
               className="px-3 py-1 text-sm bg-slate-800 border border-slate-600 rounded-md hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Previous
             </button>
-            <button 
+            <button
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
               className="px-3 py-1 text-sm bg-slate-800 border border-slate-600 rounded-md hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -151,3 +149,4 @@ export default function WeatherDashboard({ fileData, fileName }) {
     </div>
   );
 }
+

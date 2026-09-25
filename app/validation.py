@@ -58,7 +58,7 @@ def validate_date_range(start_date: str, end_date: str) -> tuple[date, date]:
     if start > end:
         raise ValidationError("start_date must be on or before end_date")
 
-    span_days = (end - start).days + 1  # inclusive of both endpoints
+    span_days = (end - start).days + 1
     if span_days > MAX_RANGE_DAYS:
         raise ValidationError(
             f"date range cannot exceed {MAX_RANGE_DAYS} days (got {span_days} days)"

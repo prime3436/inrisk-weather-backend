@@ -31,9 +31,6 @@ class WeatherStorage:
         if not bucket_name:
             raise ValueError("bucket_name is required")
         self.bucket_name = bucket_name
-        # google-cloud-storage picks up credentials automatically from
-        # GOOGLE_APPLICATION_CREDENTIALS locally, or the attached
-        # service account when running on Cloud Run.
         self._client = storage.Client()
         self._bucket = self._client.bucket(bucket_name)
 
@@ -53,7 +50,7 @@ class WeatherStorage:
             blob.upload_from_string(
                 json.dumps(data), content_type="application/json"
             )
-        except Exception as exc:  # noqa: BLE001 - surface as our own error type
+        except Exception as exc:
             raise StorageError(f"failed to upload '{filename}': {exc}")
 
     def list_files(self) -> list[dict]:
@@ -62,7 +59,7 @@ class WeatherStorage:
         """
         try:
             blobs = self._client.list_blobs(self.bucket_name)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             raise StorageError(f"failed to list bucket: {exc}")
 
         files = []
@@ -76,7 +73,6 @@ class WeatherStorage:
                     "created_at": blob.time_created.isoformat() if blob.time_created else None,
                 }
             )
-        # newest first - most useful default ordering for a dashboard
         files.sort(key=lambda f: f["created_at"] or "", reverse=True)
         return files
 
@@ -86,7 +82,7 @@ class WeatherStorage:
             raw = blob.download_as_text()
         except NotFound:
             raise FileNotFoundInBucket(filename)
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             raise StorageError(f"failed to read '{filename}': {exc}")
 
         try:

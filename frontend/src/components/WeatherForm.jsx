@@ -6,7 +6,7 @@ import { differenceInDays, parseISO } from 'date-fns';
 export default function WeatherForm({ onDataStored }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const [formData, setFormData] = useState({
     latitude: '',
     longitude: '',
@@ -21,21 +21,20 @@ export default function WeatherForm({ onDataStored }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
-    // Client-side validation
+
     if (!formData.latitude || !formData.longitude || !formData.start_date || !formData.end_date) {
       setError('All fields are required.');
       return;
     }
-    
+
     const start = parseISO(formData.start_date);
     const end = parseISO(formData.end_date);
-    
+
     if (start > end) {
       setError('Start date must be before end date.');
       return;
     }
-    
+
     const days = differenceInDays(end, start) + 1;
     if (days > 31) {
       setError(`Date range cannot exceed 31 days (currently ${days} days).`);
@@ -50,10 +49,9 @@ export default function WeatherForm({ onDataStored }) {
         start_date: formData.start_date,
         end_date: formData.end_date
       });
-      
+
       onDataStored(response.data.file);
-      
-      // Reset form
+
       setFormData({
         latitude: '',
         longitude: '',
@@ -71,7 +69,7 @@ export default function WeatherForm({ onDataStored }) {
     <div className="bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 p-6 rounded-2xl shadow-xl">
       <h2 className="text-xl font-semibold mb-4 text-white">Fetch Historical Weather</h2>
       <p className="text-sm text-slate-400 mb-6">Enter coordinates and a date range (max 31 days) to pull data into storage.</p>
-      
+
       {error && (
         <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-lg text-sm mb-6">
           {error}
@@ -105,7 +103,7 @@ export default function WeatherForm({ onDataStored }) {
             />
           </div>
         </div>
-        
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Start Date</label>
@@ -147,3 +145,4 @@ export default function WeatherForm({ onDataStored }) {
     </div>
   );
 }
+

@@ -16,8 +16,6 @@ router = APIRouter()
 
 
 def get_storage(request: Request) -> WeatherStorage:
-    # Storage client is created once at app startup and attached to
-    # app.state (see main.py) - avoids reconnecting on every request.
     return request.app.state.storage
 
 

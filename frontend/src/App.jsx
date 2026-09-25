@@ -10,8 +10,7 @@ function App() {
   const [fileData, setFileData] = useState(null);
   const [loadingFile, setLoadingFile] = useState(false);
   const [fileError, setFileError] = useState('');
-  
-  // A simple counter to trigger sidebar refreshes when new data is stored
+
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const handleDataStored = (filename) => {
@@ -30,7 +29,7 @@ function App() {
     setLoadingFile(true);
     setFileError('');
     setFileData(null);
-    
+
     try {
       const response = await apiClient.get(`/weather-file-content/${filename}`);
       setFileData(response.data);
@@ -43,18 +42,18 @@ function App() {
 
   return (
     <div className="flex h-screen w-full bg-slate-950 text-slate-50 overflow-hidden font-sans">
-      <Sidebar 
-        onSelectFile={handleSelectFile} 
-        selectedFile={selectedFile} 
+      <Sidebar
+        onSelectFile={handleSelectFile}
+        selectedFile={selectedFile}
         refreshTrigger={refreshTrigger}
         onNewRequest={handleNewRequest}
       />
-      
+
       <main className="flex-1 h-full overflow-y-auto relative">
-        {/* Background glow effects */}
+        {}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
-        
+
         <div className="relative z-10 max-w-6xl mx-auto p-8 lg:p-12 min-h-full flex flex-col">
           {!selectedFile ? (
             <div className="flex-1 flex flex-col items-center justify-center max-w-2xl mx-auto w-full">
@@ -78,7 +77,7 @@ function App() {
               ) : fileError ? (
                 <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-6 rounded-2xl flex flex-col items-center justify-center h-64">
                   <p className="text-lg font-medium">{fileError}</p>
-                  <button 
+                  <button
                     onClick={handleNewRequest}
                     className="mt-4 text-sm underline hover:text-red-300"
                   >
@@ -97,3 +96,4 @@ function App() {
 }
 
 export default App;
+
